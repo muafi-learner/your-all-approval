@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Signature · Your All Approval</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/boot.js"></script>
+  <script type="module" src="js/pages/signature.js"></script>
+</head>
+
+<body class="min-h-screen bg-neutral-50 font-sans text-neutral-900 antialiased">
+  <!-- Header, bottom nav and toast are inserted by js/ui.js -->
+
+  <main class="mx-auto max-w-2xl px-4 pb-[calc(7rem_+_env(safe-area-inset-bottom))] pt-6 sm:px-6 sm:pt-10 md:pb-16">
+
+    <div class="mb-6 sm:mb-8">
+      <p class="text-xs font-medium uppercase tracking-[0.14em] text-neutral-500">Settings</p>
+      <h1 class="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">Signature</h1>
+      <p class="mt-2 max-w-prose text-sm leading-relaxed text-neutral-600">
+        Set it up once. When you tap <span class="font-medium text-neutral-900">Approve</span>, your signature is attached to the document automatically.
+      </p>
+    </div>
+
+    <div class="space-y-5">
+
+      <!-- Current signature -->
+      <section id="savedSection" class="scroll-mt-20 rounded-xl border border-neutral-200 bg-white" aria-labelledby="savedTitle">
+        <div class="flex items-center justify-between gap-3 border-b border-neutral-200 px-4 py-3.5 sm:px-5">
+          <h2 id="savedTitle" class="text-sm font-semibold">Current signature</h2>
+          <span id="statusChip" class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium">Not set</span>
+        </div>
+
+        <div id="savedEmpty" class="p-4 sm:p-5">
+          <div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-neutral-300 px-6 py-10 text-center">
+            <span class="mb-1 grid h-10 w-10 place-items-center rounded-full border border-neutral-300">
+              <svg viewBox="0 0 24 24" class="h-5 w-5 text-neutral-500" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16c2.5-2.5 4-8.5 6.5-8.5 2 0 .2 7 2.2 7 1.3 0 2-2.6 3.1-2.6 1 0 1.2 1.6 2.4 1.6H21"/><path d="M3 20.5h18"/></svg>
+            </span>
+            <p class="text-sm font-medium">No signature saved</p>
+            <p class="max-w-xs text-xs leading-relaxed text-neutral-500">Draw or upload one below. You'll need it before you can submit or approve a document.</p>
+          </div>
+        </div>
+
+        <div id="savedFilled" class="hidden">
+          <div class="p-4 sm:p-5">
+            <figure class="max-w-xs rounded-lg border border-neutral-200 p-4 sm:p-5">
+              <figcaption class="sr-only">Stamp preview</figcaption>
+              <p id="stampLabel" class="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500"></p>
+              <div class="mt-2 flex h-24 items-end sm:h-28">
+                <img id="savedImg" alt="Your saved signature" class="max-h-full max-w-full object-contain object-left-bottom" />
+              </div>
+              <div class="mt-1 border-t border-neutral-900 pt-2">
+                <p id="stampName" class="text-sm font-semibold"></p>
+                <p id="stampRole" class="text-xs text-neutral-500"></p>
+                <p id="stampDate" class="tabular mt-1 font-mono text-[11px] text-neutral-500"></p>
+              </div>
+            </figure>
+            <p class="mt-2 text-xs text-neutral-500">Preview of how your stamp will appear on the final PDF.</p>
+
+            <dl class="mt-5 grid grid-cols-3 gap-x-3 gap-y-4 text-xs">
+              <div><dt class="text-neutral-500">Dimensions</dt><dd id="metaDims" class="tabular mt-0.5 font-mono"></dd></div>
+              <div><dt class="text-neutral-500">Size</dt><dd id="metaSize" class="tabular mt-0.5 font-mono"></dd></div>
+              <div><dt class="text-neutral-500">Source</dt><dd id="metaSource" class="mt-0.5 font-mono"></dd></div>
+              <div class="col-span-3"><dt class="text-neutral-500">SHA-256</dt><dd id="metaHash" class="mt-0.5 truncate font-mono"></dd></div>
+            </dl>
+          </div>
+
+          <div class="flex gap-2 border-t border-neutral-200 px-4 py-3.5 sm:px-5">
+            <button id="replaceBtn" type="button" class="h-10 flex-1 rounded-lg border border-neutral-300 px-4 text-sm font-medium transition hover:border-neutral-900 sm:flex-none">Replace</button>
+            <button id="deleteBtn" type="button" class="h-10 flex-1 rounded-lg px-4 text-sm font-medium text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900 sm:flex-none">Delete</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Create signature -->
+      <section id="editor" class="scroll-mt-20 rounded-xl border border-neutral-200 bg-white" aria-labelledby="editorTitle">
+        <div class="border-b border-neutral-200 px-4 py-3.5 sm:px-5">
+          <h2 id="editorTitle" class="text-sm font-semibold">Create signature</h2>
+          <p class="mt-0.5 text-xs text-neutral-500">Signing as <span id="signingAs" class="font-medium text-neutral-900"></span></p>
+        </div>
+
+        <div class="p-4 sm:p-5">
+          <div role="tablist" aria-label="Signature method" class="grid grid-cols-2 gap-1 rounded-lg bg-neutral-100 p-1">
+            <button type="button" role="tab" data-tab="draw" aria-controls="panel-draw" class="h-9 rounded-md text-sm font-medium transition">Draw</button>
+            <button type="button" role="tab" data-tab="upload" aria-controls="panel-upload" class="h-9 rounded-md text-sm font-medium transition">Upload</button>
+          </div>
+
+          <!-- Draw -->
+          <div id="panel-draw" role="tabpanel" class="mt-4">
+            <div id="padWrap" class="relative h-56 select-none overflow-hidden rounded-lg border border-neutral-300 bg-white sm:h-64">
+              <div aria-hidden="true" class="pointer-events-none absolute inset-x-5 bottom-[28%] flex items-end gap-2">
+                <span class="text-lg leading-none text-neutral-300">&times;</span>
+                <span class="mb-1 h-px flex-1 border-b border-dashed border-neutral-300"></span>
+              </div>
+              <p id="padPlaceholder" aria-hidden="true" class="pointer-events-none absolute inset-0 grid place-items-center text-sm text-neutral-300 transition-opacity">Sign here</p>
+              <canvas id="padCanvas" class="absolute inset-0 h-full w-full cursor-crosshair touch-none" role="img" aria-label="Signature drawing area"></canvas>
+            </div>
+            <div class="mt-3 flex items-center justify-between gap-3">
+              <p class="text-xs text-neutral-500">Use your finger, stylus or mouse.</p>
+              <div class="flex gap-1">
+                <button id="undoBtn" type="button" class="inline-flex h-9 items-center gap-1.5 rounded-md px-2.5 text-sm text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-900 disabled:pointer-events-none disabled:opacity-40">
+                  <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>
+                  Undo
+                </button>
+                <button id="clearBtn" type="button" class="inline-flex h-9 items-center gap-1.5 rounded-md px-2.5 text-sm text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-900 disabled:pointer-events-none disabled:opacity-40">
+                  <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/></svg>
+                  Clear
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload -->
+          <div id="panel-upload" role="tabpanel" class="mt-4 hidden">
+            <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" class="peer sr-only" />
+            <label id="dropzone" for="fileInput" class="flex h-56 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-neutral-300 bg-neutral-50 px-6 text-center transition hover:border-neutral-900 peer-focus-visible:ring-2 peer-focus-visible:ring-neutral-900 peer-focus-visible:ring-offset-2 sm:h-64">
+              <span class="mb-1 grid h-10 w-10 place-items-center rounded-full border border-neutral-300 bg-white">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4"/><path d="m7 9 5-5 5 5"/><path d="M4 20h16"/></svg>
+              </span>
+              <span class="text-sm font-medium">Choose an image or take a photo</span>
+              <span class="text-xs text-neutral-500"><span class="hidden md:inline">or drag it here · </span>PNG, JPG or WEBP, up to 5 MB</span>
+              <span class="mt-2 text-xs text-neutral-400">Tip: sign on plain white paper in good light.</span>
+            </label>
+
+            <div id="uploadPreviewWrap" class="hidden">
+              <div class="checker flex h-56 items-center justify-center rounded-lg border border-neutral-300 p-4 sm:h-64">
+                <img id="uploadPreview" alt="Processed signature preview" class="max-h-full max-w-full object-contain" />
+              </div>
+              <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+                <label class="inline-flex cursor-pointer select-none items-center gap-2.5">
+                  <input id="removeBg" type="checkbox" checked class="peer sr-only" />
+                  <span class="relative h-5 w-9 rounded-full bg-neutral-300 transition after:absolute after:left-0.5 after:top-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:transition peer-checked:bg-neutral-900 peer-checked:after:translate-x-4 peer-focus-visible:ring-2 peer-focus-visible:ring-neutral-900 peer-focus-visible:ring-offset-2"></span>
+                  <span class="text-sm">Remove background</span>
+                </label>
+                <button id="chooseAnother" type="button" class="inline-flex h-9 items-center gap-1.5 rounded-md px-2.5 text-sm text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-900">
+                  <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4"/><path d="m7 9 5-5 5 5"/><path d="M4 20h16"/></svg>
+                  Choose another
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col-reverse gap-3 border-t border-neutral-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <p class="text-xs leading-relaxed text-neutral-500">Stored only in this browser. Clearing browser data removes it.</p>
+          <button id="saveBtn" type="button" disabled class="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-neutral-900 px-5 text-sm font-medium text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-400 sm:h-10 sm:w-auto">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <span id="saveBtnLabel">Save signature</span>
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

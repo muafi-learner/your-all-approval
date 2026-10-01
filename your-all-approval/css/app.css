@@ -1,0 +1,19 @@
+/* Small global styles that Tailwind utilities don't cover. */
+
+:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 2px; }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Checkerboard behind processed signatures, to show transparent areas */
+.checker {
+  background-color: #ffffff;
+  background-image: repeating-conic-gradient(#f4f4f5 0% 25%, #ffffff 0% 50%);
+  background-size: 16px 16px;
+}
+
+/* Clean native inputs */
+input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+summary::-webkit-details-marker { display: none; }
